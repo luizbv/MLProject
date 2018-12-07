@@ -10,19 +10,26 @@ def probability50k(train, header, label, yValue):
     falseSum = 0
 
     for item in train.T[train.T[0]==header]==label:
+        
         if item == '>50K':
             trueSum += 1
         else:
             falseSum += 1
+            
     return trueSum/(trueSum+falseSum)
 
 headers = []
 trainData = []
+
 with open("adult.train.csv") as csvfile:
+    
     reader = csv.reader(csvfile) # change contents to floats
+    
     for i, row in enumerate(reader): # each row is a list
+        
         if i!=0:
             trainData.append(row)
+            
         else:
             headers = row
 
@@ -35,9 +42,13 @@ trainData = np.asarray(trainData)
 print(trainData)
 
 testData = []
+
 with open("adult.test.csv") as csvfile:
+    
     reader = csv.reader(csvfile) # change contents to floats
+    
     for i, row in enumerate(reader): # each row is a list
+        
         if i!=0:
             testData.append(row)
 
@@ -54,9 +65,13 @@ avgs =  {}
 
 # creates dictionary, each containing the header as a key with the value as an array of possible characteristics
 for i, item in enumerate(trainData.T):
+    
     if headers[i] in avgList:
+        
         avgs[headers[i]] = []
+        
         for info in item:
+            
             if info not in avgs[headers[i]]:
                 avgs[headers[i]].append(info)
 
@@ -68,10 +83,14 @@ probs = {}
 for item in trainData.T:
 
     if item in avgs.keys():
+        
         probs[item] = []
+        
         for key in avgs.keys()[avgs.keys()==item]:
+            
             probs[item].append(probability50k(trainData, item, key, len(trainData.T))})
 
     else:
+        
         probs[item] = []
         probs[item].append(getLikelihood(trainData, item, len(trainData)))
