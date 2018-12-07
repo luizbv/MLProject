@@ -2,11 +2,19 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 
-def getLikelikehood(header, yValue):
+def getLikelikehood(train, header, yValue):
     return 1
 
-def probability50k(header, label, yValue):
-    return 1
+def probability50k(train, header, label, yValue):
+    trueSum = 0
+    falseSum = 0
+
+    for item in train.T[train.T[0]==header]==label:
+        if item == '>50K':
+            trueSum += 1
+        else:
+            falseSum += 1
+    return trueSum/(trueSum+falseSum)
 
 headers = []
 trainData = []
@@ -62,8 +70,8 @@ for item in trainData.T:
     if item in avgs.keys():
         probs[item] = []
         for key in avgs.keys()[avgs.keys()==item]:
-            probs[item].append(probability50k(item, key, len(trainData.T))})
+            probs[item].append(probability50k(trainData, item, key, len(trainData.T))})
 
     else:
         probs[item] = []
-        probs[item].append(getLikelihood(item, len(trainData)))
+        probs[item].append(getLikelihood(trainData, item, len(trainData)))
